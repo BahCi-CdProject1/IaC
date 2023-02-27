@@ -7,7 +7,7 @@ Parameters:
   DevAmiId:
     Description: AMI for Jenkins EC2 instance
     Type: 'String'
-    Default: 'ami-024460a9e766a949a'  
+    Default: 'ami-0d3a94f66b42eaa0f'  
 Resources:
   VPC:
     Type: AWS::EC2::VPC
