@@ -171,6 +171,72 @@ Resources:
       Path: /
       Roles:
         - !Ref SessionManagerRole
+  ProdEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref SessionManagerInstanceProfile
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: !Ref SubnetProd
+          PrivateIpAddress: '10.64.10.1'
+          GroupSet:
+            - !Ref InstanceSecurityGroupProd
+      Tags:
+        - Key: Name
+          Value: hoh-prod
+      UserData: 
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            sudo yum update -y
+            sudo yum install httpd -y
+            sudo systemctl enable httpd.service
+            sudo systemctl start httpd.service
+            find /var/www -type d -exec chmod 2775 {} \;
+            find /var/www -type f -exec chmod 0664 {} \;
+            echo '<html><h1>HoH Production Server</h1><h3>Availability Zone: ' > /var/www/html/index.html
+            curl http://169.254.169.254/latest/meta-data/placement/availability-zone >> /var/www/html/index.html
+            echo '</h3> <h3>Instance Id: ' >> /var/www/html/index.html
+            curl http://169.254.169.254/latest/meta-data/instance-id >> /var/www/html/index.html
+            echo '</h3> <h3>Public IP: ' >> /var/www/html/index.html
+            curl http://169.254.169.254/latest/meta-data/public-ipv4 >> /var/www/html/index.html
+            echo '</h3> <h3>Local IP: ' >> /var/www/html/index.html
+            curl http://169.254.169.254/latest/meta-data/local-ipv4 >> /var/www/html/index.html
+            echo '</h3> ' >> /var/www/html/index.html
+            echo '<a href="pipeline.html">Pipeline Demo</a></html> ' >> /var/www/html/index.html
+            echo '<html><h1>Pipeline has not performed a build.</h1></html> ' > /var/www/html/pipeline.html
+  DevEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: "t2.micro"
+      ImageId: !Ref LatestAmiId
+      IamInstanceProfile: !Ref SessionManagerInstanceProfile
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: !Ref SubnetDev
+          PrivateIpAddress: '10.64.20.1'
+          GroupSet: 
+            - !Ref InstanceSecurityGroupDev
+      Tags:
+        - Key: Name
+          Value: hoh-dev
+      UserData: 
+        Fn::Base64: 
+          !Sub |
+            #!/bin/bash
+            sudo yum update -y
+            cd /etc/yum.repos.d/
+            sudo wget https://pkg.jenkins.io/redhat-stable/jenkins.repo
+            sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+            sudo amazon-linux-extras install java-openjdk11 -y
+            sudo yum install jenkins -y
+            sudo yum install git -y
+            sudo systemctl enable jenkins
+            sudo systemctl start jenkins
 Outputs:
   hohvpc:
     Description: HoH VPC1
