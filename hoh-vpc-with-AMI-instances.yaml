@@ -3,7 +3,7 @@ Parameters:
   ProdAmiId:
     Description: AMI for Website EC2 instance
     Type: 'String'
-    Default: 'ami-0fdcb89e8d2e8d93d'
+    Default: 'ami-06deb6bd572fb29e9'
   DevAmiId:
     Description: AMI for Jenkins EC2 instance
     Type: 'String'
