@@ -53,10 +53,10 @@ resource "aws_internet_gateway" "hoh-app-igw" {
 #Create Route Table and Associations
 resource "aws_route_table" "hoh-app-web-rt" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
-  route = [ {
+  route = {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.hoh-app-igw.id}"
-  } ]
+  } 
 }
 resource "aws_route_table_association" "prod" {
   subnet_id = aws_subnet.SubnetProd
@@ -128,7 +128,7 @@ resource "aws_security_group_rule" "http-prod" {
 
 resource "aws_security_group_rule" "icmp-prod" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
-  security_group_id = aws_security_group.prod-sg
+  security_group_id = aws_security_group.prod-sg.id
   ingress = {
     description = "Allow ICMP Between Subnets"
     from_port = 8
@@ -141,7 +141,7 @@ resource "aws_security_group_rule" "icmp-prod" {
     #Dev-sg rules
 resource "aws_security_group_rule" "ssh-dev" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
-  security_group_id = aws_security_group.dev-sg
+  security_group_id = aws_security_group.dev-sg.id
   ingress = {
     description = "Allow SSH IPv4 IN"
     from_port = 22
@@ -153,7 +153,7 @@ resource "aws_security_group_rule" "ssh-dev" {
 
 resource "aws_security_group_rule" "jenkins-dev" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
-  security_group_id = aws_security_group.dev-sg
+  security_group_id = aws_security_group.dev-sg.id
   ingress = {
     description = "Allow Jenkins 8080 IPv4 IN"
     from_port = 8080
@@ -165,7 +165,7 @@ resource "aws_security_group_rule" "jenkins-dev" {
 
 resource "aws_security_group_rule" "icmp-dev" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
-  security_group_id = aws_security_group.dev-sg
+  security_group_id = aws_security_group.dev-sg.id
   ingress = {
     description = "Allow ICMP Between Subnets"
     from_port = 8
