@@ -90,13 +90,13 @@ resource "aws_security_group" "dev-sg" {
   name = "dev-sg"
   description = "Enable SSH, HTTP, 8080, and ICMP access for Jenkins server"
   #Need to re-allow all egress due to terraform stripping the allow-all-out
-  egress = [ {
+  egress {
     cidr_blocks = [ "0.0.0.0/0" ]
     description = "Allow all traffic out"
     from_port = 0
     protocol = -1
     to_port = 0
-  } ]  
+  }   
   tags = {
     Name = "dev-sg"
   }
@@ -106,7 +106,7 @@ resource "aws_security_group" "dev-sg" {
 resource "aws_security_group_rule" "ssh-prod" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.prod-sg.id
-  ingress = {
+  ingress {
     description = "Allow SSH IPv4 IN"
     from_port = 22
     to_port = 22
@@ -116,9 +116,9 @@ resource "aws_security_group_rule" "ssh-prod" {
 }
 
 resource "aws_security_group_rule" "http-prod" {
-  vpc_id = "${aws_vpc.hoh-app-vpc.id}"
+  # vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.prod-sg.id
-  ingress = {
+  ingress {
     description = "Allow HTTP IPv4 IN"
     from_port = 80
     to_port = 80
@@ -128,9 +128,9 @@ resource "aws_security_group_rule" "http-prod" {
 }
 
 resource "aws_security_group_rule" "icmp-prod" {
-  vpc_id = "${aws_vpc.hoh-app-vpc.id}"
+  # vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.prod-sg.id
-  ingress = {
+  ingress {
     description = "Allow ICMP Between Subnets"
     from_port = 8
     to_port = -1
@@ -143,7 +143,7 @@ resource "aws_security_group_rule" "icmp-prod" {
 resource "aws_security_group_rule" "ssh-dev" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.dev-sg.id
-  ingress = {
+  ingress {
     description = "Allow SSH IPv4 IN"
     from_port = 22
     to_port = 22
@@ -155,7 +155,7 @@ resource "aws_security_group_rule" "ssh-dev" {
 resource "aws_security_group_rule" "jenkins-dev" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.dev-sg.id
-  ingress = {
+  ingress {
     description = "Allow Jenkins 8080 IPv4 IN"
     from_port = 8080
     to_port = 8080
@@ -167,7 +167,7 @@ resource "aws_security_group_rule" "jenkins-dev" {
 resource "aws_security_group_rule" "icmp-dev" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.dev-sg.id
-  ingress = {
+  ingress {
     description = "Allow ICMP Between Subnets"
     from_port = 8
     to_port = -1
@@ -254,7 +254,8 @@ data "aws_iam_policy_document" "policy-for-role" {
 }
 
 resource "aws_iam_policy_attachment" "default" {
-  role = aws_iam_role.session-manager-role.name
+  name = "default"
+  roles = aws_iam_role.session-manager-role.name
   policy_arn = aws_iam_policy.root.arn
 }
 
