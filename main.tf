@@ -6,14 +6,13 @@ terraform {
    }
  }
  backend "s3" {
-   region = "us-east-1"
+   region = var.region
    key    = "terraform.tfstate"
  }
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  # profile = "<CHANGE THIS!>"
+  region  = var.region
 }
 
 #RESOURCES
@@ -261,7 +260,7 @@ resource "aws_iam_policy_attachment" "default" {
 
 #Create the Instances
 resource "aws_instance" "web_server" {
-  ami           = "ami-06deb6bd572fb29e9"
+  ami           = var.images["PROD"]
   instance_type = "t2.micro"
   # subnet_id = aws_subnet.SubnetProd
   vpc_security_group_ids = [ "${aws_security_group.prod-sg.id}" ]
@@ -275,7 +274,7 @@ resource "aws_instance" "web_server" {
 }
 
 resource "aws_instance" "jenkins_server" {
-  ami           = "ami-0d3a94f66b42eaa0f"
+  ami           = var.images["DEV"]
   instance_type = "t2.micro"
   # subnet_id = aws_subnet.SubnetDev
   vpc_security_group_ids = [ "${aws_security_group.dev-sg.id}" ]
