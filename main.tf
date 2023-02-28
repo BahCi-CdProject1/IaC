@@ -59,9 +59,6 @@ resource "aws_route_table" "hoh-app-web-rt" {
   }
 }
 
-# resource "aws_route" "main-route" {
-  
-# }
 resource "aws_route_table_association" "prod" {
   subnet_id = aws_subnet.SubnetProd
   route_table_id = aws_route_table.hoh-app-web-rt
@@ -77,13 +74,13 @@ resource "aws_security_group" "prod-sg" {
   name = "prod-sg"
   description = "Enable SSH, HTTP, and ICMP access for production server"
   #Need to re-allow all egress due to terraform stripping the allow-all-out
-  egress = [ {
+  egress {
     cidr_blocks = [ "0.0.0.0/0" ]
     description = "Allow all traffic out"
     from_port = 0
     protocol = -1
     to_port = 0
-  } ]
+  } 
   tags = {
     Name = "prod-sg"
   }  
