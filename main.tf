@@ -198,7 +198,7 @@ data "aws_iam_policy_document" "assume-role-policy" {
 resource "aws_iam_policy" "root" {
   name = "root"
   path = "/"
-  policy = data.aws_iam_policy_document.policy-for-role
+  policy = data.aws_iam_policy_document.policy-for-role.json
 }
 
 data "aws_iam_policy_document" "policy-for-role" {
