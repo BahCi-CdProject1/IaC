@@ -104,76 +104,70 @@ resource "aws_security_group" "dev-sg" {
 
     #Prod-sg rules
 resource "aws_security_group_rule" "ssh-prod" {
-  vpc_id = "${aws_vpc.hoh-app-vpc.id}"
+  # vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.prod-sg.id
-  ingress {
-    description = "Allow SSH IPv4 IN"
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  type = "ingress"
+  description = "Allow SSH IPv4 IN"
+  from_port = 22
+  to_port = 22
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "http-prod" {
   # vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.prod-sg.id
-  ingress {
-    description = "Allow HTTP IPv4 IN"
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  type = "ingress" 
+  description = "Allow HTTP IPv4 IN"
+  from_port = 80
+  to_port = 80
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "icmp-prod" {
   # vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.prod-sg.id
-  ingress {
-    description = "Allow ICMP Between Subnets"
-    from_port = 8
-    to_port = -1
-    protocol = "icmp"
-    cidr_blocks = ["10.64.0.0/16"]
-  }
+  type = "ingress" 
+  description = "Allow ICMP Between Subnets"
+  from_port = 8
+  to_port = -1
+  protocol = "icmp"
+  cidr_blocks = ["10.64.0.0/16"]
 }
 
     #Dev-sg rules
 resource "aws_security_group_rule" "ssh-dev" {
-  vpc_id = "${aws_vpc.hoh-app-vpc.id}"
+  # vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.dev-sg.id
-  ingress {
-    description = "Allow SSH IPv4 IN"
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  type = "ingress" 
+  description = "Allow SSH IPv4 IN"
+  from_port = 22
+  to_port = 22
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "jenkins-dev" {
-  vpc_id = "${aws_vpc.hoh-app-vpc.id}"
+  # vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.dev-sg.id
-  ingress {
-    description = "Allow Jenkins 8080 IPv4 IN"
-    from_port = 8080
-    to_port = 8080
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  type = "ingress" 
+  description = "Allow Jenkins 8080 IPv4 IN"
+  from_port = 8080
+  to_port = 8080
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group_rule" "icmp-dev" {
-  vpc_id = "${aws_vpc.hoh-app-vpc.id}"
+  # vpc_id = "${aws_vpc.hoh-app-vpc.id}"
   security_group_id = aws_security_group.dev-sg.id
-  ingress {
-    description = "Allow ICMP Between Subnets"
-    from_port = 8
-    to_port = -1
-    protocol = "icmp"
-    cidr_blocks = ["10.64.0.0/16"]
-  }
+  type = "ingress" 
+  description = "Allow ICMP Between Subnets"
+  from_port = 8
+  to_port = -1
+  protocol = "icmp"
+  cidr_blocks = ["10.64.0.0/16"]
 }
 
 #Create Session Manager Role and Add to Instace Profile
