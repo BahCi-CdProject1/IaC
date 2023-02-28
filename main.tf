@@ -6,13 +6,13 @@ terraform {
    }
  }
  backend "s3" {
-   region = var.region
+   region = "us-east-1"
    key    = "terraform.tfstate"
  }
 }
 
 provider "aws" {
-  region  = var.region
+  region  = "us-east-1"
 }
 
 #RESOURCES
