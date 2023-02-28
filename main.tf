@@ -53,7 +53,7 @@ resource "aws_internet_gateway" "hoh-app-igw" {
 #Create Route Table and Associations
 resource "aws_route_table" "hoh-app-web-rt" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
-  route = {
+  route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.hoh-app-igw.id
   }
