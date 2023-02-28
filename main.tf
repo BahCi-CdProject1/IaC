@@ -104,7 +104,7 @@ resource "aws_security_group" "dev-sg" {
     #Prod-sg rules
 resource "aws_security_group_rule" "ssh-prod" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
-  security_group_id = aws_security_group.prod-sg
+  security_group_id = aws_security_group.prod-sg.id
   ingress = {
     description = "Allow SSH IPv4 IN"
     from_port = 22
@@ -116,7 +116,7 @@ resource "aws_security_group_rule" "ssh-prod" {
 
 resource "aws_security_group_rule" "http-prod" {
   vpc_id = "${aws_vpc.hoh-app-vpc.id}"
-  security_group_id = aws_security_group.prod-sg
+  security_group_id = aws_security_group.prod-sg.id
   ingress = {
     description = "Allow HTTP IPv4 IN"
     from_port = 80
